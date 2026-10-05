@@ -1,0 +1,8 @@
+# Personal: Last.fm credentials, listening history, logs
+config.ini
+scrobbles.db
+scrobbles.db.*
+*.log
+*.old.py
+.DS_Store
+__pycache__/
