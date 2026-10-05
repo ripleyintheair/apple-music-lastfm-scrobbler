@@ -1,15 +1,29 @@
-# Apple Music Last.fm Scrobbler for macOS — Scrobble HomePod, iPhone & Mac Plays
+# Apple Music → Last.fm Scrobbler: Set-and-Forget Scrobbling for HomePod, iPhone, iPad & Mac
 
-**Scrobble your Apple Music listening to Last.fm — including songs played on HomePod, iPhone, iPad, and Apple TV — using the play history that Apple Music already syncs to your Mac.**
+**Scrobble Apple Music from every Apple device to Last.fm automatically, HomePod included.** Set it up once on a Mac and it runs in the background, picking up what you played anywhere on your Apple ID. No app to install on your phone, no scans to remember, no switching music players.
 
-Apple Music has no built-in Last.fm scrobbling, and most Apple Music scrobblers only see what's playing on the Mac in front of them. Music you play on a HomePod (or on your phone with no scrobbler app open) never reaches Last.fm. This scrobbler takes a different approach: Apple syncs play history from every device on your Apple ID into your Mac's Music library, so it reads that history and submits the new plays to Last.fm.
+Apple Music has no built-in Last.fm support, and every existing workaround covers only part of your listening:
 
-- 🏠 **HomePod scrobbling**: plays from HomePod and HomePod mini get scrobbled, with no AirPlay tricks and no network sniffing
-- 📱 **All your Apple devices**: iPhone, iPad, Apple TV, and Mac, as long as the plays sync to your Mac's library
-- 🔁 **Counts repeat plays**: uses play counts to catch songs played more than once between checks
-- 🪶 **Lightweight**: one Python file, standard library only, no dependencies, no app to keep open
-- 🔒 **Private**: talks only to the Music app on your Mac and to Last.fm, nothing else
-- 🚀 **Runs in the background**: installs as a launchd agent that starts at login
+| | Fully automatic | HomePod & other devices | Keep using Apple's Music app |
+|---|:---:|:---:|:---:|
+| Mac menu-bar scrobblers (NepTunes, Scrobblr, CatalinaScrobbler…) | ✅ | ❌ only plays on that Mac | ✅ |
+| Last.fm iPhone app (library scan) | ❌ open it and scan | ⚠️ only what's synced to that phone | ✅ |
+| iPhone background scrobblers (Finale, QuietScrob…) | ⚠️ only when iOS lets them run | ⚠️ varies | ✅ |
+| Third-party players (Marvis Pro, Marquee, Soor…) | ✅ | ❌ only plays inside that player | ❌ |
+| **This scrobbler** | ✅ | ✅ | ✅ |
+
+<sub>Comparison based on each project's own documentation, October 2026.</sub>
+
+**The trick:** Apple already syncs the play history from all your devices into your Mac's Music library. This scrobbler reads that history every few minutes and sends anything new to Last.fm. A HomePod in the kitchen, your iPhone in the car, an iPad in bed: if it plays from your library, it ends up on Last.fm.
+
+- 🏠 **HomePod scrobbling that works**: HomePod and HomePod mini plays get scrobbled, with no AirPlay tricks and no network sniffing
+- 📱 **Every Apple device**: iPhone, iPad, Apple TV, and Mac, as long as the plays sync to your Mac's library
+- 🔕 **Zero effort after setup**: starts at login, restarts itself, catches up on plays from the last 7 days
+- 🔁 **Counts repeat plays**: play an album twice and it's scrobbled twice
+- 🪶 **Lightweight and dependency-free**: one Python file, standard library only, nothing to build
+- 🔒 **Private**: talks only to the Music app on your Mac and to Last.fm
+
+**Best fit:** a Mac that stays on, like a desktop or home-server Mac mini, with the Music app left open.
 
 ## How it works
 
@@ -29,8 +43,8 @@ Because it reads plays after the fact, it is a **history-sync scrobbler**, not a
 ## Installation
 
 ```bash
-git clone https://github.com/ripleyintheair/apple-music-scrobbler.git
-cd apple-music-scrobbler
+git clone https://github.com/ripleyintheair/apple-music-lastfm-scrobbler.git
+cd apple-music-lastfm-scrobbler
 cp config.example.ini config.ini
 ```
 
@@ -73,7 +87,7 @@ launchctl list | grep apple-music-lastfm-scrobbler      # is it running?
 
 ## Limitations
 
-Honest notes so you know what to expect:
+Honest notes so you know what to expect. If real-time "now playing" updates matter more to you than catching every device, a menu-bar scrobbler or a scrobbling music player may suit you better.
 
 - **Plays from other devices arrive late.** HomePod and iPhone plays only reach Last.fm after Apple syncs them to your Mac. That's often within hours, sometimes a day or more. Apple's play-count syncing is occasionally unreliable, and the scrobbler can't scrobble a play your Mac never receives.
 - **Repeat-play times are estimates.** Music stores only the most recent play time, so when a song is played several times between checks, the earlier plays are timed by working backwards from the last one.
@@ -103,6 +117,12 @@ Not natively. Apple Music has no built-in scrobbling, so you need a third-party 
 **Can you scrobble HomePod to Last.fm?**
 Yes. HomePod doesn't expose what it's playing to other apps, but its plays sync to your Mac's Music library through Sync Library, and this scrobbler picks them up from there.
 
+**Do I need to install an app on my iPhone or HomePod?**
+No. Nothing runs on your iPhone, iPad, or HomePod. Keep using Apple's Music app as usual, and the Mac does the scrobbling for all of them.
+
+**How is this different from other Apple Music scrobblers?**
+Most Mac scrobblers watch what's playing on that one Mac, and iPhone scrobblers depend on you opening the app or on iOS letting them run. This one reads the play history Apple syncs from all your devices, so it can catch plays that other scrobblers never see, like music played on a HomePod.
+
 **Does it scrobble my iPhone?**
 Yes, if your iPhone syncs your library. iPhone plays reach Last.fm through your Mac, with no app needed on the phone.
 
@@ -119,7 +139,7 @@ This stops and removes the background service. Delete the folder to remove every
 
 ## Contributing
 
-Improvements are welcome! If you've found a bug, have an idea, or got it working with a setup not covered here, please [open an issue](https://github.com/ripleyintheair/apple-music-scrobbler/issues) or send a pull request. Reports from other macOS versions and device setups are especially helpful.
+Improvements are welcome! If you've found a bug, have an idea, or got it working with a setup not covered here, please [open an issue](https://github.com/ripleyintheair/apple-music-lastfm-scrobbler/issues) or send a pull request. Reports from other macOS versions and device setups are especially helpful.
 
 ## Credits
 
@@ -131,4 +151,4 @@ Developed with help from [Claude](https://claude.ai), Anthropic's AI assistant.
 
 ---
 
-*Keywords: Apple Music scrobbler, Last.fm scrobbler for Mac, scrobble HomePod to Last.fm, HomePod Last.fm, Apple Music Last.fm integration, macOS Music app scrobbler, iTunes scrobbler alternative, scrobble iPhone Apple Music.*
+*Keywords: Apple Music scrobbler, Last.fm scrobbler for Mac, scrobble HomePod to Last.fm, HomePod Last.fm scrobbler, automatic Apple Music scrobbling, Apple Music Last.fm integration, macOS Music app scrobbler, scrobble iPhone without an app, iTunes scrobbler alternative, NepTunes alternative, background Last.fm scrobbler.*
